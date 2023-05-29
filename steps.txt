@@ -1,0 +1,4 @@
+1. Open PHPMyAdmin
+2. Create a database called "social" (case-sensitive)
+3. Import "initialize.sql" into the database
+4. Run Apache server, go to homepage, and start using the website

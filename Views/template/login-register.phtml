@@ -1,0 +1,110 @@
+<!-- Button to open Login/Register Modal -->
+<button type="button" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#login_register_modal">Login/Register</button>
+
+<!-- Modal -->
+<div class="modal fade" id="login_register_modal" tabindex="-1" aria-labelledby="login_register_modal_label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <nav>
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <!-- Login Tab -->
+                        <button class="nav-link active" id="nav-login-tab" data-bs-toggle="tab" data-bs-target="#nav-login" type="button" role="tab" aria-controls="nav-login" aria-selected="true">Login</button>
+
+                        <!-- Register Tab -->
+                        <button class="nav-link" id="nav-register-tab" data-bs-toggle="tab" data-bs-target="#nav-register" type="button" role="tab" aria-controls="nav-register" aria-selected="false">Register</button>
+                    </div>
+                </nav>
+                    <div class="tab-content" id="nav-tabContent">
+
+                    <!-- Login Section -->
+                    <div class="tab-pane fade show active" id="nav-login" role="tabpanel" aria-labelledby="nav-login-tab">
+                        <form method="post" action="">
+                            <div class="my-3 row">
+                                <label for="username" class="col-sm-2 col-form-label">Username</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" type="text" aria-label="username" name="username" id="username">
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="password" class="col-sm-2 col-form-label">Password</label>
+                                <div class="col-sm-10">
+                                    <input type="password" class="form-control" id="password" name="password">
+                                </div>
+                            </div>
+                            <input type="submit" name="login_btn" value="Login" class="btn btn-success float-end">
+                        </form>
+                    </div>
+
+                    <!-- Register Section -->
+                    <!-- Mark the required fields with bold and star mark -->
+                    <div class="tab-pane fade" id="nav-register" role="tabpanel" aria-labelledby="nav-register-tab">
+                        <form method="post" action="" enctype="multipart/form-data">
+                            <div class="my-3 row">
+                                <label for="fullname" class="col-sm-2 col-form-label fw-bold">Fullname*</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" type="text" aria-label="fullname" name="fullname" id="fullname">
+                                </div>
+                            </div>
+                            <div class="my-3 row">
+                                <label for="username" class="col-sm-2 col-form-label fw-bold">Username*</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" type="text" aria-label="username" name="username" id="username">
+                                </div>
+                            </div>
+                            <div class="my-3 row">
+                                <label for="email" class="col-sm-2 col-form-label fw-bold">Email*</label>
+                                <div class="col-sm-10">
+                                    <input type="email" class="form-control" id="email" placeholder="name@example.com" name="email">
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="dob" class="col-sm-2 col-form-label">DOB</label>
+                                <div class="col-sm-10">
+                                    <input type="date" class="form-control" id="dob" name="dob">
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="address" class="col-sm-2 col-form-label">Address</label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" id="address" name="address" rows="3"></textarea>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="loc" class="col-sm-2 col-form-label">Location</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="loc" name="loc">
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="rel_status" class="col-sm-2 col-form-label">Rel. Status</label>
+                                <div class="col-sm-10">
+                                    <select class="form-select" aria-label="Relationship Status" id="rel_status" name="rel_status">
+                                        <option value="Single" selected>Single</option>
+                                        <option value="Committed">Committed</option>
+                                        <option value="Engaged">Engaged</option>
+                                        <option value="Married">Married</option>
+                                        <option value="Its Complicated">Its Complicated</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="password" class="col-sm-2 col-form-label fw-bold">Password*</label>
+                                <div class="col-sm-10">
+                                    <input type="password" class="form-control" id="password" name="password">
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="img" class="col-sm-2 col-form-label">Prof. Pic</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" type="file" id="img" name="img" accept="image/png, image/jpeg">
+                                </div>
+                            </div>
+                            <input type="submit" name="register_btn" value="Register" class="btn btn-success float-end">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

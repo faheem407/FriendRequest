@@ -1,0 +1,143 @@
+<!-- Include Header Section -->
+<?php require('template/header.phtml') ?>
+
+<!-- Search Bar -->
+<form action="" autocomplete="off" class="form-horizontal mb-3" method="post" accept-charset="utf-8">
+    <div class="input-group">
+        <input name="searchtext" class="form-control" type="text" placeholder="Search Users"
+        <?php
+            if (isset($_POST["searchtext"])) {
+                echo ' value="' . $_POST["searchtext"] . '"';
+            }
+        ?>
+        >
+        <span class="input-group-btn">
+            <button class="btn btn-default" type="submit" id="userSearch" name="search_user">
+                <span class="icon-search">🔍</span>
+            </button>
+        </span>
+    </div>
+</form>
+
+<!-- Users Display -->
+<div class="accordion" id="accordion_people">
+    <?php
+        $user = new User();
+
+        // Check if user is logged in or not and get the friends list, friend requests sent list and friend requests received list
+        $friends_list = isset($_SESSION["login"]) ? $user->get_friends_list($_SESSION["login"]) ? array_map(function($i) {
+                            return $i[0];
+                        }, $user->get_friends_list($_SESSION["login"])) : array() : array();
+        $friend_request_sent_list = isset($_SESSION["login"]) ? $user->get_friend_request_sent_list($_SESSION["login"]) ? array_map(function($i) {
+                                    return $i[0];
+                                }, $user->get_friend_request_sent_list($_SESSION["login"])) : array() : array();
+        $friend_request_received_list = isset($_SESSION["login"]) ? $user->get_friend_request_received_list($_SESSION["login"]) ? array_map(function($i) {
+                                        return $i[0];
+                                    }, $user->get_friend_request_received_list($_SESSION["login"])) : array() : array();
+
+        // Display only username and full name if user is not logged in
+        if (!isset($_SESSION["login"])) {
+
+            // Get all users info based on search parameters
+            $all_info = isset($_POST["search_user"]) ? $user->getUserInfoNotLogged($_POST["searchtext"]) : $user->getUserInfoNotLogged();
+            
+            // If users exist after search, display the details
+            if ($all_info) {
+                foreach($all_info as $i => $row) {
+                    echo '
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="heading' . $i . '">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse' . $i . '" aria-expanded="false" aria-controls="collapse' . $i . '">
+                            <img src="';
+                            if ($row[2] != "") {
+                                echo "images/" . $row[2];
+                            }
+                            else {
+                                echo "images/default.jpeg";
+                            }
+                            echo '" alt="' . $row[1] . '" width="40" height="40" class="rounded-circle me-2">&emsp;<strong>' . $row[0] . '</strong>&thinsp;(@' . $row[1] . ')</button>
+                        </h2>
+                        <div id="collapse' . $i . '" class="accordion-collapse collapse" aria-labelledby="heading' . $i . '" data-bs-parent="#accordion_people">
+                        <div class="accordion-body text-danger">
+                            Please Login to view more info!
+                        </div>
+                    </div>
+                    </div>';
+                }
+            }
+            else {
+                // Display appropriate message in case no user exists
+                echo "No Users found!";
+            }
+        }
+
+        // If user is logged in, display the full details of all users
+        else {
+            // Get all users info based on search parameters
+            $all_info = isset($_POST["search_user"]) ? $user->getUserInfoLogged($_POST["searchtext"]) : $user->getUserInfoLogged();
+
+            // If users exist after search, display the details
+            if ($all_info) {
+                foreach($all_info as $i => $row) {
+                    echo '
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="heading' . $i . '">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse' . $i . '" aria-expanded="false" aria-controls="collapse' . $i . '">
+                            <img src="';
+                            if ($row[2] != "") {
+                                echo "images/" . $row[2];
+                            }
+                            else {
+                                echo "images/default.jpeg";
+                            }
+                            echo '" alt="' . $row[1] . '" width="40" height="40" class="rounded-circle me-2">&emsp;<strong>' . $row[0] . '</strong>&thinsp;(@' . $row[1] . ')&emsp;';
+                            
+                            // Show appropriate symbols and buttons based on the logged in user's friendship status with the specific user
+                            if (in_array($row[1], $friends_list)) {
+                                echo '<span class="text-primary" title="You are Friends!">✓</span>&emsp;
+                                    <form method="post" action="">
+                                        <input type="submit" title="Remove @' . $row[1] . ' as your friend?" name="removefriend__' . $row[1] . '" value="⨯ Remove Friend" class="btn btn-outline-danger rounded-pill">
+                                    </form>';
+                            }
+                            elseif (in_array($row[1], $friend_request_sent_list)) {
+                                echo '<form method="post" action="">
+                                        <input type="submit" title="Cancel @' . $row[1] . '\'s friend request?" name="cancelfriend__' . $row[1] . '" value="⨯" class="btn btn-outline-danger rounded-pill">
+                                    </form>';
+                            }
+                            elseif (in_array($row[1], $friend_request_received_list)) {
+                                echo '<form method="post" action="">
+                                        <input type="submit" title="Accept @' . $row[1] . '\'s friend request?" name="acceptfriend__' . $row[1] . '" value="✓" class="btn btn-outline-success rounded-pill">&emsp;
+                                        <input type="submit" title="Decline @' . $row[1] . '\'s friend request?" name="declinefriend__' . $row[1] . '" value="⨯" class="btn btn-outline-danger rounded-pill">
+                                    </form>';
+                            }
+                            elseif ($_SESSION["login"] != $row[1]) {
+                                echo '<form method="post" action="">
+                                        <input type="submit" title="Add @' . $row[1] . ' as a friend?" name="addfriend__' . $row[1] . '" value="+" class="btn btn-outline-primary rounded-pill">
+                                    </form>';
+                            }
+                            echo '</button>
+                        </h2>
+                        <div id="collapse' . $i . '" class="accordion-collapse collapse" aria-labelledby="heading' . $i . '" data-bs-parent="#accordion_people">
+                        <div class="accordion-body">
+                            <ul>
+                                <li><strong>Email:&ensp;</strong>' . $row[3] . '</li>
+                                <li><strong>Date of Birth:&ensp;</strong>' . $row[5] . '</li>
+                                <li><strong>Address:&ensp;</strong>' . $row[4] . '</li>
+                                <li><strong>Current Location:&ensp;</strong>' . $row[7] . '</li>
+                                <li><strong>Relationship Status:&ensp;</strong>' . $row[6] . '</li>
+                            </ul>
+                        </div>
+                    </div>
+                    </div>';
+                }
+            }
+            else {
+                // Display message when no users are found after search
+                echo "No Users found!";
+            }
+        }
+    ?>
+</div>
+
+<!-- Include Footer Section -->
+<?php require('template/footer.phtml') ?>
